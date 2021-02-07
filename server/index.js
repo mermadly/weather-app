@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const cors = require("cors");
 const fetch = require("node-fetch");
+const tools = require('./utils/utils')
 
 app.use(cors());
 app.use(express.json());
@@ -25,8 +26,10 @@ app.get('/current', async (req, res) =>{
     const url = originalEndpoints.current(query)
     console.log("url", url)
 
-    console.log("url",)
-    const fetchData = async () => {
+    if (query === undefined) {
+        res.send('Error, la ubicación no fue definida')
+    } else {
+        const fetchData = async () => {
         try {
           const respuesta = await fetch(url);
           const data = await respuesta.json();
@@ -38,8 +41,21 @@ app.get('/current', async (req, res) =>{
 
     const data = await fetchData();
     console.log(data)
-    res.send(data)
+    
+    const filteredData = {
+        temp: tools.calculateCels(data.main.temp),
+        tempMax: tools.calculateCels(data.main.temp_max),
+        tempMin: tools.calculateCels(data.main.temp_min),
+        feelsLike: tools.calculateCels(data.main.feels_like),
+        humidity: data.humidity,
+        weather: data.weather[0].main,
+        weatherDescription: data.weather[0].description,
+        icon: data.weather[0].icon
+    }
 
+    console.log("filtered",filteredData.weatherDescription)
+    res.json(filteredData)}
+    
 })
 
 
