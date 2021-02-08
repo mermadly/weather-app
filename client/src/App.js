@@ -62,11 +62,13 @@
   }
 
     return (
-      <div>
+      <div className="md:w-1/3 m-8 text-gray-700">
         {weather !== {} &&
         <>
-        <FontAwesomeIcon onClick={fetchCurrentLocation} icon={faMapMarkerAlt} size="2x" color="#c94972"/>
+        <div className="flex flex-row justify-between align-center">
+       <FontAwesomeIcon onClick={fetchCurrentLocation} icon={faMapMarkerAlt} size="2x" color="#dc2626"/>
         <Select handleSubmit={handleSubmit}/>
+        </div>
         <Card weather={weather} location={currentLocation}/>
         <TinyCards forecast={forecast}/>
         </>

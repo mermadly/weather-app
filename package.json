@@ -9,7 +9,6 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
-    "auto": "^10.16.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.2",
@@ -20,8 +19,8 @@
     "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build:css": "postcss src/tailwind.css -o src/main.css",
-    "watch:css": "postcss src/tailwind.css -o src/main.css"
+    "build:css" : "postcss src/tailwind.css -o src/main.css",
+    "watch:css" : "postcss src/tailwind.css -o src/main.css"
   },
   "eslintConfig": {
     "extends": [
