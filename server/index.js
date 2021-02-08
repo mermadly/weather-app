@@ -11,7 +11,7 @@ const apiKey = "49866814f22224b3a5a22e274ac8d7d8"
 
 const originalEndpoints = {
     current: location => `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}`,
-    forecast: location => `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}`
+    forecast: (lon, lat) => `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}`
 };
 
 
@@ -20,27 +20,14 @@ app.get('/v1', (req, res) =>{
 })
 
 
-app.get('/current', async (req, res) =>{
-    const query = req.query.q;
-    console.log("query",query)
-    const url = originalEndpoints.current(query)
-    console.log("url", url)
+app.get('/current/:id', async (req, res) => {
+    const city = req.params.id;
 
-    if (query === undefined) {
+    if (city === undefined) {
         res.send('Error, la ubicación no fue definida')
     } else {
-        const fetchData = async () => {
-        try {
-          const respuesta = await fetch(url);
-          const data = await respuesta.json();
-          return data;
-        } catch (error) {
-          console.log("error", error.message);
-        }
-      };
-
-    const data = await fetchData();
-    console.log(data)
+        
+    const data = await tools.fetchLocation(city, originalEndpoints)
     
     const filteredData = {
         temp: tools.calculateCels(data.main.temp),
@@ -54,9 +41,53 @@ app.get('/current', async (req, res) =>{
     }
 
     console.log("filtered",filteredData.weatherDescription)
-    res.json(filteredData)}
+    res.json(filteredData)
+  }
     
 })
 
+
+app.get('/forecast/:id', async (req, res) => {
+  const city = req.params.id;
+
+  if (city === undefined) {
+      res.send('Error, la ubicación no fue definida')
+  } else {
+    const data = await tools.fetchLocation(city, originalEndpoints)
+
+    const lon = data.coord.lon
+    const lat = data.coord.lat 
+
+    const fetchDaily = async (city, endpoints) => {
+      const url = originalEndpoints.forecast(lon, lat)
+      try {
+            const respuesta = await fetch(url);
+            const data = await respuesta.json();
+            return data;
+          } catch (error) {
+            console.log("error", error.message);
+          }
+    }
+
+  const dataDaily = await fetchDaily();
+  const dailyArray = dataDaily.daily
+
+  const finalArray = []
+
+  for (i = 0; i < 5; i++) {
+    const dailyDate = new Date(dailyArray[i].dt * 1000);
+    const dateString = dailyDate.toDateString().slice(0,-5);
+    const comma = ","
+    const position = 3
+    const finalDate = [dateString.slice(0, position), comma, dateString.slice(position)].join('')
+
+
+    finalArray.push({date: finalDate, tempMin: tools.calculateCels(dailyArray[i].temp.min), tempMax: tools.calculateCels(dailyArray[i].temp.max), icon: dailyArray[i].weather[0].icon})
+  }
+  
+  res.json(finalArray)
+
+}
+})
 
 app.listen(8080, () => console.log('Listening on port 8080...'))
