@@ -2,11 +2,13 @@ import React from "react";
 import {IWeather} from '../../App'
 
 type Props = {
+  hasWeather: boolean,
   weather:  IWeather,
   location: string
 }
 
 const Card: React.FC<Props> = ({ 
+  hasWeather,
   weather,
   location
 }) => {
