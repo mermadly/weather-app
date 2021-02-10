@@ -10,6 +10,8 @@
     const [currentLocation, setCurrentLocation] = useState("");
     const [weather, setWeather] = useState({})
     const [forecast, setForecast] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState("")
 
   
     const fetchCurrentLocation = async () => {
@@ -24,38 +26,53 @@
     
   const fetchWeather = async () => {
     if (currentLocation === "") return
+    const url = `http://localhost:8080/current/${currentLocation}`;
+
+    try {
+      const respuesta = await fetch(url)
+      const data = await respuesta.json();
+      setWeather(data)
+     } catch (error) {
+       setError(error.message)
+     }
     
-    let url = `http://localhost:8080/current/${currentLocation}`;
-
-    const respuesta = await fetch(url);
-    const data = await respuesta.json();
-
-    setWeather(data);
   };
 
       
   const fetchForecast = async () => {
     if (currentLocation === "") return
-    
     let url = `http://localhost:8080/forecast/${currentLocation}`;
 
+    try {
     const respuesta = await fetch(url);
     const data = await respuesta.json();
-
     setForecast(data);
-  };
+     } catch (error) {
+       setError(error.message)
+     }
+    
 
+  };
   
    useEffect(() => {
      fetchCurrentLocation()
    }, [])
+   
   
    useEffect(() => {
-    fetchWeather()
-    fetchForecast()
+     if (currentLocation !== "") {
+    setLoading(true)
+    const fetch = async () => { 
+    await fetchWeather()
+    await fetchForecast()
+    }
+    
+    fetch()
+  
+    setLoading(false)
+  }
   }, [currentLocation])
 
-  console.log(currentLocation)
 
   const handleSubmit = (e) => {
     setCurrentLocation(e.target.value)
@@ -66,7 +83,7 @@
         {weather !== {} &&
         <>
         <div className="flex flex-row justify-between align-center">
-       <FontAwesomeIcon onClick={fetchCurrentLocation} icon={faMapMarkerAlt} size="2x" color="#dc2626"/>
+        <FontAwesomeIcon onClick={fetchCurrentLocation} icon={faMapMarkerAlt} size="2x" className="md:text-4xl" color="#dc2626"/>
         <Select handleSubmit={handleSubmit}/>
         </div>
         <Card weather={weather} location={currentLocation}/>
