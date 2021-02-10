@@ -6,10 +6,26 @@
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
   import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 
-  const App = () => {
+  export interface IWeather {
+    temp: number,
+      tempMin: number,
+      tempMax: number,
+      feelsLike: number,
+      weatherDescription:string,
+      icon: string
+  }
+
+export  interface IDay {
+    date: string,
+    icon: string,
+    tempMax: number,
+    tempMin: number
+   }
+   
+  const App: React.FC = ({}) => {
     const [currentLocation, setCurrentLocation] = useState("");
-    const [weather, setWeather] = useState({})
-    const [forecast, setForecast] = useState([])
+    const [weather, setWeather] = useState<IWeather | null>(null)
+    const [forecast, setForecast] = useState<IDay[] | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
 
@@ -74,17 +90,17 @@
   }, [currentLocation])
 
 
-  const handleSubmit = (e) => {
-    setCurrentLocation(e.target.value)
+  const handleSubmit = (value : string) => {
+    setCurrentLocation(value)
   }
 
     return (
       <div className="md:w-1/3 m-8 text-gray-700">
-        {weather !== {} &&
+        {weather !== null &&
         <>
         <div className="flex flex-row justify-between align-center">
         <FontAwesomeIcon onClick={fetchCurrentLocation} icon={faMapMarkerAlt} size="2x" className="md:text-4xl" color="#dc2626"/>
-        <Select handleSubmit={handleSubmit}/>
+        <Select onSubmit={handleSubmit}/>
         </div>
         <Card weather={weather} location={currentLocation}/>
         <TinyCards forecast={forecast}/>

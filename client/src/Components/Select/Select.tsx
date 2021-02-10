@@ -1,7 +1,14 @@
 import React from "react";
 
-const Select = (props) => {
-    const {handleSubmit} = props
+type Props = {
+  onSubmit: (value:string) => void
+}
+
+const Select: React.FC <Props> = ({ 
+  onSubmit
+}) => {
+
+  const handleSubmit = event => onSubmit (event.target.value) 
 
   return (
     <div className="mt-2">
