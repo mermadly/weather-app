@@ -1,14 +1,17 @@
+export{}
+
 const fetch = require("node-fetch");
 
+
 module.exports = {
-    calculateCels: tempKel => {
-        const kelvin = 273
-        const tempCels = Math.round(tempKel - kelvin)
+    calculateCels: (tempKel:number) => {
+        const kelvin:number = 273
+        const tempCels:number = Math.round(tempKel - kelvin)
     
         return tempCels
     },
-    fetchLocation: async (city, endpoints) => {
-        const url = endpoints.current(city)
+    fetchLocation: async (city:string, endpoints:any) => {
+        const url:string = endpoints.current(city)
         
             const fetchData = async () => {
             try {

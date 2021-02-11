@@ -1,11 +1,16 @@
 import React from 'react'
+import {IDay} from '../../App'
 
-const TinyCards = (props) => {
-    const {forecast} = props
- console.log(forecast)
+type Props = {
+forecast: IDay[]
+}
+
+const TinyCards: React.FC<Props> = ({ 
+   forecast
+  }) => {
     return (
         <div className="mt-12 flex flex-row flex-wrap md:flex-nowrap items-center">
-            {forecast !== [] && forecast.map(day => {
+            {forecast !== null && forecast.map(day => {
                 return(
                     <>
                     <div className="border-2 rounded-lg mr-2 mt-2 md:p-2 border-red-100 last:mr-0">

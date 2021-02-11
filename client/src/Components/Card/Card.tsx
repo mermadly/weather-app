@@ -1,8 +1,17 @@
 import React from "react";
+import {IWeather} from '../../App'
 
-const Card = (props) => {
-  const { weather, location } = props;
+type Props = {
+  hasWeather: boolean,
+  weather:  IWeather,
+  location: string
+}
 
+const Card: React.FC<Props> = ({ 
+  hasWeather,
+  weather,
+  location
+}) => {
   return (
     <div className="mt-12 bg-red-200  p-4 md:p-6 rounded-2xl container flex flex-row justify-between align-center">
       <div className="w-52 md:w-72">
