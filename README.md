@@ -3,16 +3,16 @@ Weather app que consiste de un bff desarrollado con Node.js y Express para organ
 
 Cliente:
 
-React
-Tailwind
-TypeScript
+- React
+- Tailwind
+- TypeScript
 
 Servidor:
 
-Node
-Express
-TypeScript
-Nodemon (watcher)
+- Node
+- Express
+- TypeScript
+- Nodemon (watcher)
 Requisitos: Node >= 6 Npm Nodemon (npm i -g nodemon)
 
 Configuración:
