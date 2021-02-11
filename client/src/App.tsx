@@ -3,6 +3,7 @@
   import Select from './Components/Select/Select'
   import TinyCards from './Components/TinyCards/TinyCards'
   import Loading from './Components/Loading/Loading'
+  import Error from './Components/Error/Error'
 
   import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
   import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
@@ -51,7 +52,9 @@ export  interface IDay {
       const respuesta = await fetch(url)
       const data:IWeather = await respuesta.json();
       setWeather(data)
-     } catch (error) {
+      if (data !== null) {setError("")}
+
+    } catch (error) {
        setError(error.message)
      }
     
@@ -65,13 +68,14 @@ export  interface IDay {
     setForecast(null)
 
     try {
-    const respuesta = await fetch(url);
-    const data:IDay[] = await respuesta.json();
-    setForecast(data);
-     } catch (error) {
+      const respuesta = await fetch(url);
+      const data:IDay[] = await respuesta.json();
+      setForecast(data);
+      if (data !== null) {setError("")}
+    } catch (error) {
        setError(error.message)
      }
-    
+  
 
   };
   
@@ -90,7 +94,7 @@ export  interface IDay {
     }
     
     fetch()
-  
+
     setLoading(false)
   }
   }, [currentLocation])
@@ -107,7 +111,7 @@ export  interface IDay {
         <Select onSubmit={handleSubmit}/>
       </div>
         {loading && <Loading/>}
-        {!loading && error && "Error"}
+        {!loading && error !== "" &&  <Error error={error}/>}
         {!loading && hasWeather && <>
         <Card weather={weather} location={currentLocation} hasWeather={hasWeather}/>
         <TinyCards forecast={forecast}/>
