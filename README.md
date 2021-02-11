@@ -1,6 +1,8 @@
 # weather-app
 Weather app que consiste de un bff desarrollado con Node.js y Express para organizar el resultado de las llamadas a las apis externas y hacer un prefiltrado de lo que se va a enviar al front a través de varios endpoints, y un frontend desarrollado con React y Tailwind que realiza calls al bff y luego muestra en pantalla esos resultados.
 
+Disclaimer: Algunos de los primeros commits aparecen únicamente como "Echavarría" que es mi apellido ya que estaba usando otro mail.
+
 Cliente:
 
 - React
